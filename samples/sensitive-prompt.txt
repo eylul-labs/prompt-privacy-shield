@@ -1,0 +1,8 @@
+I want to paste this into an AI tool:
+
+OPENAI_API_KEY=demo-key-value-for-sample
+Authorization: Bearer demo-token-value-for-sample
+DATABASE_URL=postgres://user:password@localhost:5432/app
+Contact: user@example.com
+Local path: /home/user/private/project
+Home server: 192.168.1.10

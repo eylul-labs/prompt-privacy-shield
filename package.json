@@ -1,0 +1,72 @@
+{
+  "name": "prompt-privacy-shield-vscode",
+  "displayName": "Prompt Privacy Shield",
+  "description": "Sanitize code, logs, and prompts before sending them to AI tools.",
+  "version": "0.0.1",
+  "publisher": "eylul-labs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eylul-labs/prompt-privacy-shield.git"
+  },
+  "homepage": "https://github.com/eylul-labs/prompt-privacy-shield#readme",
+  "bugs": {
+    "url": "https://github.com/eylul-labs/prompt-privacy-shield/issues"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "Linters"
+  ],
+  "keywords": [
+    "ai",
+    "privacy",
+    "security",
+    "prompt",
+    "sanitize",
+    "secrets",
+    "redact",
+    "chatgpt",
+    "codex",
+    "cursor",
+    "claude"
+  ],
+  "galleryBanner": {
+    "color": "#101820",
+    "theme": "dark"
+  },
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onCommand:promptPrivacyShield.sanitizeSelection",
+    "onCommand:promptPrivacyShield.sanitizeClipboard"
+  ],
+  "main": "./dist/src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "promptPrivacyShield.sanitizeSelection",
+        "title": "Prompt Privacy Shield: Sanitize Selection"
+      },
+      {
+        "command": "promptPrivacyShield.sanitizeClipboard",
+        "title": "Prompt Privacy Shield: Sanitize Clipboard"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "generate:icon": "python3 scripts/generate_icon.py",
+    "package": "vsce package --out prompt-privacy-shield-$npm_package_version.vsix",
+    "test": "npm run compile && node --test test/*.test.js",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.9.2",
+    "typescript": "^5.8.0"
+  }
+}

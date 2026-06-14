@@ -1,0 +1,5 @@
+node_modules/
+dist/
+*.vsix
+.prompt-privacy/
+**/.prompt-privacy/
