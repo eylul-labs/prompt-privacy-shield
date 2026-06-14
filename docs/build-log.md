@@ -11,3 +11,8 @@
   - copy sanitized output to clipboard
   - open a Markdown report
 - Added core sanitizer and first tests.
+- Added `0.0.2` usability pass:
+  - separate report-opening commands from copy-only commands
+  - improved Markdown report format
+  - fixed `.env` assignment redaction to preserve key names
+  - avoided clipboard changes when selected text is harmless

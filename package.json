@@ -2,7 +2,7 @@
   "name": "prompt-privacy-shield-vscode",
   "displayName": "Prompt Privacy Shield",
   "description": "Sanitize code, logs, and prompts before sending them to AI tools.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "eylul-labs",
   "license": "MIT",
   "repository": {
@@ -40,18 +40,28 @@
   "icon": "assets/icon.png",
   "activationEvents": [
     "onCommand:promptPrivacyShield.sanitizeSelection",
-    "onCommand:promptPrivacyShield.sanitizeClipboard"
+    "onCommand:promptPrivacyShield.sanitizeClipboard",
+    "onCommand:promptPrivacyShield.copySanitizedSelection",
+    "onCommand:promptPrivacyShield.copySanitizedClipboard"
   ],
   "main": "./dist/src/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "promptPrivacyShield.sanitizeSelection",
-        "title": "Prompt Privacy Shield: Sanitize Selection"
+        "title": "Prompt Privacy Shield: Sanitize Selection and Open Report"
       },
       {
         "command": "promptPrivacyShield.sanitizeClipboard",
-        "title": "Prompt Privacy Shield: Sanitize Clipboard"
+        "title": "Prompt Privacy Shield: Sanitize Clipboard and Open Report"
+      },
+      {
+        "command": "promptPrivacyShield.copySanitizedSelection",
+        "title": "Prompt Privacy Shield: Copy Sanitized Selection"
+      },
+      {
+        "command": "promptPrivacyShield.copySanitizedClipboard",
+        "title": "Prompt Privacy Shield: Copy Sanitized Clipboard"
       }
     ]
   },

@@ -17,6 +17,8 @@ VS Code commands:
 ```text
 Prompt Privacy Shield: Sanitize Selection
 Prompt Privacy Shield: Sanitize Clipboard
+Prompt Privacy Shield: Copy Sanitized Selection
+Prompt Privacy Shield: Copy Sanitized Clipboard
 ```
 
 Current detection includes:
@@ -32,8 +34,11 @@ Current detection includes:
 - local machine paths
 - URL query secrets such as `token=...` or `api_key=...`
 
-The sanitized result is copied to your clipboard and opened in a Markdown
-preview document with a short report.
+The report commands copy the sanitized result to your clipboard and open a
+Markdown report. The copy commands only copy the sanitized result.
+
+If no sensitive patterns are found in a selection, the clipboard is left
+unchanged.
 
 ## Example
 
@@ -64,7 +69,7 @@ Local path: [REDACTED_LOCAL_PATH]
    ```
 
 4. Select the sample text.
-5. Run `Prompt Privacy Shield: Sanitize Selection`.
+5. Run `Prompt Privacy Shield: Sanitize Selection and Open Report`.
 6. Confirm the sanitized text is copied to your clipboard.
 
 ## Development
@@ -78,7 +83,7 @@ npm run package
 `npm run package` creates a versioned VSIX, for example:
 
 ```text
-prompt-privacy-shield-0.0.1.vsix
+prompt-privacy-shield-0.0.2.vsix
 ```
 
 ## License

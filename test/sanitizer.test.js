@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { buildReport, sanitizeText } = require('../dist/src/sanitizer');
+const { buildMarkdownReport, buildReport, sanitizeText } = require('../dist/src/sanitizer');
 
 test('redacts common secrets and private context', () => {
   const input = [
@@ -14,7 +14,7 @@ test('redacts common secrets and private context', () => {
   const result = sanitizeText(input);
 
   assert.equal(result.changed, true);
-  assert.match(result.sanitized, /\[REDACTED\]/);
+  assert.match(result.sanitized, /OPENAI_API_KEY=\[REDACTED\]/);
   assert.match(result.sanitized, /Bearer \[REDACTED_TOKEN\]/);
   assert.match(result.sanitized, /\[REDACTED_EMAIL\]/);
   assert.match(result.sanitized, /\[REDACTED_LOCAL_PATH\]/);
@@ -23,7 +23,7 @@ test('redacts common secrets and private context', () => {
 
 test('redacts github tokens, jwt values, and database urls', () => {
   const input = [
-    `token=${'ghp_' + 'abcdefghijklmnopqrstuvwxyz1234567890'}`,
+    `GitHub token: ${'ghp_' + 'abcdefghijklmnopqrstuvwxyz1234567890'}`,
     `jwt=${'eyJ' + 'hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.aaaaaaaaaaaaaaaa.bbbbbbbbbbbbbbbb'}`,
     'DATABASE_URL=postgres://user:pass@localhost:5432/app',
   ].join('\n');
@@ -52,4 +52,14 @@ test('builds a readable report', () => {
   const report = buildReport(result);
 
   assert.match(report, /email: 1/);
+});
+
+test('builds a markdown report with sanitized text', () => {
+  const result = sanitizeText('email=user@example.com');
+  const report = buildMarkdownReport(result, 'selection');
+
+  assert.match(report, /# Prompt Privacy Shield Report/);
+  assert.match(report, /Source: selection/);
+  assert.match(report, /Email: 1/);
+  assert.match(report, /\[REDACTED_EMAIL\]/);
 });

@@ -38,14 +38,15 @@ const RULES: Rule[] = [
     pattern: /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g,
   },
   {
+    type: 'env-secret',
+    placeholder: '$1[REDACTED]',
+    pattern: /^(\s*[A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|PASS|API_KEY|PRIVATE_KEY)[A-Z0-9_]*\s*=\s*).+$/gim,
+    replacement: (match: string) => match.replace(/^(\s*[A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|PASS|API_KEY|PRIVATE_KEY)[A-Z0-9_]*\s*=\s*).+$/i, '$1[REDACTED]'),
+  },
+  {
     type: 'github-token',
     placeholder: '[REDACTED_GITHUB_TOKEN]',
     pattern: /\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{20,}\b|github_pat_[A-Za-z0-9_]{40,}/g,
-  },
-  {
-    type: 'api-key',
-    placeholder: '[REDACTED_API_KEY]',
-    pattern: /\bsk-[A-Za-z0-9_-]{20,}\b|\b(?:api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*["']?[^"'\s]{12,}/gi,
   },
   {
     type: 'aws-access-key',
@@ -68,10 +69,9 @@ const RULES: Rule[] = [
     pattern: /\b(?:postgres|postgresql|mysql|mongodb|redis):\/\/[^\s"'`<>]+/gi,
   },
   {
-    type: 'env-secret',
-    placeholder: '$1=[REDACTED]',
-    pattern: /^(\s*[A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|PASS|API_KEY|PRIVATE_KEY)[A-Z0-9_]*\s*=\s*).+$/gim,
-    replacement: (match: string) => match.replace(/^(\s*[A-Z0-9_]*(?:SECRET|TOKEN|PASSWORD|PASS|API_KEY|PRIVATE_KEY)[A-Z0-9_]*\s*=\s*).+$/i, '$1[REDACTED]'),
+    type: 'api-key',
+    placeholder: '[REDACTED_API_KEY]',
+    pattern: /\bsk-[A-Za-z0-9_-]{20,}\b|\b(?:api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*["']?[^"'\s]{12,}/gi,
   },
   {
     type: 'url-secret',
@@ -134,4 +134,35 @@ export function buildReport(result: SanitizeResult): string {
     lines.push(`- ${finding.type}: ${finding.count}`);
   }
   return lines.join('\n');
+}
+
+export function buildMarkdownReport(result: SanitizeResult, source: string): string {
+  const lines = [
+    '# Prompt Privacy Shield Report',
+    '',
+    `Source: ${source}`,
+    `Changed: ${result.changed ? 'yes' : 'no'}`,
+    `Finding categories: ${result.findings.length}`,
+    '',
+  ];
+
+  if (!result.findings.length) {
+    lines.push('No sensitive patterns were detected.');
+    return lines.join('\n');
+  }
+
+  lines.push('## Findings', '');
+  for (const finding of result.findings) {
+    lines.push(`- ${humanizeFindingType(finding.type)}: ${finding.count}`);
+  }
+
+  lines.push('', '## Sanitized Text', '', '```text', result.sanitized, '```');
+  return lines.join('\n');
+}
+
+function humanizeFindingType(type: FindingType): string {
+  return type
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 }

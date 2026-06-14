@@ -27,6 +27,8 @@ bug report.
 
 - `Prompt Privacy Shield: Sanitize Selection`
 - `Prompt Privacy Shield: Sanitize Clipboard`
+- `Prompt Privacy Shield: Copy Sanitized Selection`
+- `Prompt Privacy Shield: Copy Sanitized Clipboard`
 
 ## Keywords
 
